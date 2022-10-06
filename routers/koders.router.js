@@ -6,11 +6,29 @@ const router = express.Router();
 
 
 router.get('', async (request, response) => {
-    const allKoders = await Koder.find({})
+    let allKoders = await Koder.find({})
+
+    const {gender,generation,age} = request.query
+
+    let kodersFiltered
+
+    if(gender){
+        allKoders = allKoders.filter(koder => koder.gender === gender)
+        kodersFiltered = allKoders
+    }
+    if(generation){
+        allKoders = allKoders.filter(koder => koder.generation === generation)
+        kodersFiltered = allKoders
+    }
+    if(age){
+        allKoders = allKoders.filter(koder => koder.age === age)
+        kodersFiltered = allKoders
+    }
+
     response.json({
         success: true,
         data: {
-            koders: allKoders
+            koders: kodersFiltered || allKoders
         }
     })
 })
